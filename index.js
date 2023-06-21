@@ -53,6 +53,14 @@ app.get('/info', (request, response) => {
         <p>${currentHour}</p>`
     )
 })
+
+app.delete('/api/persons/:id', (request, response) => {
+    const id = Number(request.params.id)
+    persons = persons.filter(person => person.id !== id)
+
+    response.status(204).end()
+})
+
 app.listen(PORT, () => {
     console.log(`Server initialized in port ${PORT}`)
 })
