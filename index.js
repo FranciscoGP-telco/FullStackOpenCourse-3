@@ -33,6 +33,14 @@ app.get('/api/persons', (request, response) => {
     response.json(persons)
 })
 
+app.get('/info', (request, response) => {
+    let numberOfPersons = persons.length
+    let currentHour = new Date();
+    response.send(
+        `<p>Phonebook has info for ${numberOfPersons} people</p>
+        <p>${currentHour}</p>`
+    )
+})
 app.listen(PORT, () => {
     console.log(`Server initialized in port ${PORT}`)
 })
