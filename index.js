@@ -3,9 +3,13 @@ const morgan = require('morgan')
 
 const app = express()
 
-app.use(morgan('tiny'))
-
 const PORT = 3001
+
+morgan.token('body', function (req, res) { 
+  return JSON.stringify(req.body)
+})
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.use(express.json())
 
@@ -43,7 +47,6 @@ app.get('/api/persons', (request, response) => {
 
 app.get('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
-    console.log(id)
     const person = persons.find(person => person.id === id)
     if(person){
         response.json(person)
