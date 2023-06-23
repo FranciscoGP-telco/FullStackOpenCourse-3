@@ -3,7 +3,7 @@ const morgan = require('morgan')
 
 const app = express()
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 
 morgan.token('body', function (req, res) { 
   return JSON.stringify(req.body)
