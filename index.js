@@ -67,12 +67,15 @@ app.get('/api/persons/:id', (request, response, next) => {
 })
 
 app.get('/info', (request, response) => {
-  let numberOfPersons = persons.length
-  let currentHour = new Date();
-  response.send(
-      `<p>Phonebook has info for ${numberOfPersons} people</p>
-      <p>${currentHour}</p>`
-  )
+  Person.find({})
+    .then(persons => {
+      const numberOfPersons = persons.length
+      const currentHour = new Date()
+      response.send(
+        `<p>Phonebook has info for ${numberOfPersons} people</p>
+        <p>${currentHour}</p>`
+    )
+    })
 })
 
 app.delete('/api/persons/:id', (request, response, next) => {
