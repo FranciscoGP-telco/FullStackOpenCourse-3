@@ -66,6 +66,14 @@ app.get('/api/persons/:id', (request, response, next) => {
     .catch(error => next(error))
 })
 
+app.get('/info', (request, response) => {
+  let numberOfPersons = persons.length
+  let currentHour = new Date();
+  response.send(
+      `<p>Phonebook has info for ${numberOfPersons} people</p>
+      <p>${currentHour}</p>`
+  )
+})
 
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndDelete(request.params.id)
@@ -76,40 +84,54 @@ app.delete('/api/persons/:id', (request, response, next) => {
 })
 
 app.post('/api/persons', (request, response, next) => {
-    const body = request.body
-    
-    if (!body.name) {
+  const body = request.body
+  
+  if (!body.name) {
+    return response.status(400).json({ 
+      error: 'Name missing' 
+    })
+  }
+
+  if (!body.number) {
       return response.status(400).json({ 
-        error: 'Name missing' 
+        error: 'Number missing' 
       })
     }
-  
-    if (!body.number) {
+    
+  Person.find({name: body.name})
+    .then((personFind) => {
+      if(personFind.length === 0){
+        const person = new Person({
+          name: body.name,
+          number: body.number
+        })
+        
+        person.save()
+          .then(savedPerson => {
+            response.json(savedPerson)
+        })
+      } else {
         return response.status(400).json({ 
-          error: 'Number missing' 
+          error: 'Name duplicated in the DB' 
         })
       }
-      
-    Person.find({name: body.name})
-      .then((personFind) => {
-        if(personFind.length === 0){
-          const person = new Person({
-            name: body.name,
-            number: body.number
-          })
-          
-          person.save()
-            .then(savedPerson => {
-              response.json(savedPerson)
-          })
-        } else {
-          return response.status(400).json({ 
-            error: 'Name duplicated in the DB' 
-          })
-        }
-      })
-      .catch(error => next(error))
-    
+    })
+    .catch(error => next(error))
+})
+
+app.put('/api/persons/:id', (request, response, next) => {
+  const body = request.body
+
+  const person = {
+    name: body.name,
+    number: body.number
+  }
+
+  Person.findByIdAndUpdate(request.params.id, person)
+    .then(updatedPerson => {
+      response.json(updatedPerson)
+    })
+    .catch(error => next(error))
 })
 
 app.use(unknownEndpoint)
