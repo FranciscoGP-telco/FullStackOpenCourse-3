@@ -17,9 +17,18 @@ const personSchema = new mongoose.Schema({
     name: {
         type: String,
         minLength: 3,
-        required: true
+        required: [true, 'You must insert a name']
     },
-    number: String,
+    number: {
+        type: String,
+            validate: {
+                validator: function(v) {
+                return /\d{2,3}-\d{8}/.test(v)
+            },
+            message: props => `${props.value} The number introduced is not a correct number!`
+        },
+        required: [true, 'You must insert a phone number']
+    }
 })
 
 
