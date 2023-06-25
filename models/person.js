@@ -6,7 +6,7 @@ const url = process.env.MONGODB_URI
 
 mongoose.connect(url)
     .then(result => {
-        console.log('connected!')
+        console.log(result, 'connected!')
     })
     .catch((error) => {
         console.log(`Error connecting to MongoDB: ${error}`)
@@ -21,8 +21,8 @@ const personSchema = new mongoose.Schema({
     },
     number: {
         type: String,
-            validate: {
-                validator: function(v) {
+        validate: {
+            validator: function(v) {
                 return /\d{2,3}-\d{8}/.test(v)
             },
             message: props => `${props.value} The number introduced is not a correct number!`

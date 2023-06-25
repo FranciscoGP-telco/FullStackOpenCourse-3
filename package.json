@@ -8,7 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
     "build:ui": "rm -rf build && cd ../FullStackOpenCourse/part2/phonebook && npm run build && cp -r build '../../../FullStackOpenCourse 3'",
-    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push",
+    "lint": "eslint ."
   },
   "author": "Francisco Garcia",
   "license": "MIT",
@@ -21,6 +22,7 @@
     "static": "^2.0.0"
   },
   "devDependencies": {
+    "eslint": "^8.43.0",
     "nodemon": "^2.0.22"
   }
 }
